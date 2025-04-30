@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const statesController = require('../../controllers/stateController');
 
-// 👇 ADD THIS at the top:
+//  ADD THIS at the top:
 const verifyState = require('../../middleware/verifyState');
 
 // Route to get all states (no verifyState needed)

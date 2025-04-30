@@ -1,36 +1,32 @@
 const statesData = require('../models/statesData.json');
-const getStateName = require('./getStateName');
 
 const jsonMessage = (req, res, attribute) => {
-    const code = req.code;
-    const state = statesData.find(state => state.code === code);
-    const stateName = getStateName(code);
+    const code = req.params.state.toUpperCase();
+    const state = statesData.find(st => st.code === code);
 
     if (!state) {
-        return res.status(404).json({ message: `Invalid state abbreviation parameter` });
+        return res.status(400).json({ message: 'Invalid state abbreviation parameter' });
     }
 
-    let response = { state: stateName };
-
-    // Dynamically add the correct attribute
     switch (attribute) {
         case 'capital':
-            response.capital = state.capital_city;
+            res.json({ state: state.state, capital: state.capital });
             break;
         case 'nickname':
-            response.nickname = state.nickname;
+            res.json({ state: state.state, nickname: state.nickname });
             break;
         case 'population':
-            response.population = state.population;
+            res.json({ state: state.state, population: Number(state.population).toLocaleString() });
             break;
         case 'admission':
-            response.admission_date = state.admission_date;
+            const admissionDate = new Date(state.admission_date);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = admissionDate.toLocaleDateString('en-US', options);
+            res.json({ state: state.state, admitted: formattedDate });
             break;
         default:
-            return res.status(400).json({ message: 'Invalid attribute requested' });
+            res.status(400).json({ message: 'Invalid attribute requested' });
     }
-
-    res.json(response);
 };
 
 module.exports = jsonMessage;
