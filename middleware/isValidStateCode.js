@@ -1,4 +1,3 @@
- 
 const statesData = require('../models/statesData.json');
 
 const validCodes = statesData.map(state => state.code);
