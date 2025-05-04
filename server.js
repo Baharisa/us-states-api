@@ -1,4 +1,3 @@
- 
 require('dotenv').config();
 const express = require('express');
 const app = express();
@@ -11,7 +10,6 @@ const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
 const PORT = process.env.PORT;
 
-
 // Connect to MongoDB
 connectDB();
 
@@ -19,7 +17,7 @@ connectDB();
 app.use(logger);
 
 // Cross Origin Resource Sharing
-app.use(cors());
+app.use(cors(corsOptions));
 
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
@@ -49,6 +47,6 @@ app.all('*', (req, res) => {
 app.use(errorHandler);
 
 mongoose.connection.once('open', () => {
-    console.log('✅ Connected to MongoDB');
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+    console.log('Connected to MongoDB');
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
